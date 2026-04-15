@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  
+  --color-black: #050505;
+  --color-white: #ffffff;
+  --color-gray-900: #0a0a0a;
+  --color-gray-800: #1a1a1a;
+  --color-gray-700: #2a2a2a;
+  --color-gray-600: #666666;
+  --color-gray-500: #8a8a8a;
+  --color-gray-400: #aaaaaa;
+  --color-gray-300: #cccccc;
+  --color-gray-200: #eeeeee;
+  --color-gray-100: #f5f5f5;
+}
+
+@layer base {
+  * {
+    @apply border-white/10;
+    cursor: none !important;
+  }
+  
+  body {
+    @apply bg-black text-white font-sans antialiased selection:bg-white selection:text-black overflow-x-hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans tracking-tighter font-black;
+  }
+}
+
+@layer utilities {
+  .noise {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: "";
+    opacity: 0.03;
+    z-index: 999;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  .grid-overlay {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    pointer-events: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0 40px;
+    z-index: 50;
+  }
+
+  .grid-overlay div {
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .text-outline {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+    color: transparent;
+  }
+
+  .eyebrow {
+    @apply text-[12px] uppercase tracking-[0.4em] text-gray-600;
+  }
+
+  .main-title {
+    @apply text-[clamp(2rem,11vw,7rem)] font-black leading-[0.85] tracking-[-0.06em] whitespace-nowrap;
+  }
+
+  .status-badge {
+    @apply flex items-center gap-2 text-[10px] uppercase tracking-[0.1em] text-gray-600 border border-white/10 px-4 py-2 rounded-full;
+  }
+
+  .status-dot {
+    @apply w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_8px_#fff];
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .transform-style-3d {
+    transform-style: preserve-3d;
+  }
+
+  .glass-text {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+    background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.7) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 4px 32px rgba(255, 255, 255, 0.2),
+                 0 1px 2px rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* Lenis Smooth Scroll */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Smooth Scroll Anchor */
+html {
+  scroll-behavior: smooth;
+}
