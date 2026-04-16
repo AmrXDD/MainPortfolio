@@ -53,7 +53,7 @@ export default function About() {
             01 / About
           </span>
           <h2 className="text-4xl md:text-6xl font-bold mb-8 leading-tight">
-            I build digital products that feel <span className="text-gray-500">expensive.</span>
+           I design and build high-end digital <span className="text-gray-500">experiences.</span>
           </h2>
           <div className="space-y-6 text-gray-400 text-lg font-light leading-relaxed">
             <p>
