@@ -98,7 +98,7 @@ export default function Hero() {
             letterSpacing: '0.25em',
             textTransform: 'uppercase',
           }}>
-            Senior UI/UX Developer
+            Senior UI/UX Designer & Full Stack Developer
           </span>
         </div>
         
