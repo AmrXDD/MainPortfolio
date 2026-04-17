@@ -63,13 +63,13 @@ export default function Cursor() {
       {/* Main Dot */}
       <div
         ref={cursorRef}
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-white rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
+        className="hidden md:block fixed top-0 left-0 w-1.5 h-1.5 bg-white rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
       />
       
       {/* Follower Circle */}
       <div
         ref={followerRef}
-        className={`fixed top-0 left-0 pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 border border-white rounded-full transition-all duration-500 ease-out ${
+        className={`hidden md:block fixed top-0 left-0 pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 border border-white rounded-full transition-all duration-500 ease-out ${
           isHovering ? 'w-12 h-12 bg-white border-none' : 'w-10 h-10'
         } ${isProject ? 'w-16 h-16 border-white bg-transparent' : ''}`}
       >

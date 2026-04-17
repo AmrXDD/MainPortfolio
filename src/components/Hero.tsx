@@ -150,13 +150,13 @@ export default function Hero() {
         <div className="w-full flex flex-col items-center md:items-start relative my-8 perspective-1000">
           <h1 
             ref={firstNameRef}
-            className="text-[clamp(4rem,15vw,12rem)] leading-[0.8] font-black font-display tracking-tighter text-white drop-shadow-[0_10px_20px_rgba(255,255,255,0.15)]"
+            className="text-[clamp(3rem,12vw,12rem)] leading-[0.8] font-black font-display tracking-tighter text-white drop-shadow-[0_10px_20px_rgba(255,255,255,0.15)]"
           >
             Amr
           </h1>
           <h1 
             ref={lastNameRef}
-            className="text-[clamp(4rem,15vw,12rem)] leading-[0.8] font-black font-display tracking-tighter text-transparent [-webkit-text-stroke:2px_rgba(255,255,255,0.8)] ml-0 md:ml-[10vw] drop-shadow-[0_10px_20px_rgba(255,255,255,0.15)]"
+            className="text-[clamp(3rem,12vw,12rem)] leading-[0.8] font-black font-display tracking-tighter text-transparent [-webkit-text-stroke:2px_rgba(255,255,255,0.8)] ml-0 md:ml-[10vw] drop-shadow-[0_10px_20px_rgba(255,255,255,0.15)]"
           >
             Ghamrawy
           </h1>
