@@ -42,6 +42,30 @@ export default function Hero() {
     // Clean up props after animation
     tl.set([subtextRef.current, ctaRef.current], { opacity: 1, clearProps: 'none' });
 
+    // 3D Hover Effect for Name
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!firstNameRef.current || !lastNameRef.current) return;
+
+      const { clientX, clientY } = e;
+      const x = (clientX / window.innerWidth - 0.5) * 2;
+      const y = (clientY / window.innerHeight - 0.5) * 2;
+
+      const intensity = window.innerWidth < 768 ? 10 : 30;
+
+      gsap.to([firstNameRef.current, lastNameRef.current], {
+        rotateY: x * intensity,
+        rotateX: -y * intensity,
+        x: x * 20,
+        y: y * 20,
+        duration: 1,
+        ease: 'power2.out',
+        transformPerspective: 1000,
+        transformOrigin: "center"
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
     // Magnetic Button Logic
     const initMagnetic = (element: HTMLElement | null) => {
       if (!element) return;
@@ -94,6 +118,7 @@ export default function Hero() {
     return () => {
       splitFirst.revert();
       splitLast.revert();
+      window.removeEventListener('mousemove', handleMouseMove);
       cleanup1 && cleanup1();
       cleanup2 && cleanup2();
     };
@@ -122,38 +147,38 @@ export default function Hero() {
         </div>
         
         {/* Name (Staggered Layout) */}
-        <div className="w-full flex flex-col items-center md:items-start relative my-8">
+        <div className="w-full flex flex-col items-center md:items-start relative my-8 perspective-1000">
           <h1 
             ref={firstNameRef}
-            className="text-[clamp(4rem,15vw,12rem)] leading-[0.8] font-black font-display tracking-tighter text-white"
+            className="text-[clamp(4rem,15vw,12rem)] leading-[0.8] font-black font-display tracking-tighter text-white drop-shadow-[0_10px_20px_rgba(255,255,255,0.15)]"
           >
-            AMR
+            Amr
           </h1>
           <h1 
             ref={lastNameRef}
-            className="text-[clamp(4rem,15vw,12rem)] leading-[0.8] font-black font-display tracking-tighter text-transparent [-webkit-text-stroke:2px_rgba(255,255,255,0.8)] ml-0 md:ml-[10vw]"
+            className="text-[clamp(4rem,15vw,12rem)] leading-[0.8] font-black font-display tracking-tighter text-transparent [-webkit-text-stroke:2px_rgba(255,255,255,0.8)] ml-0 md:ml-[10vw] drop-shadow-[0_10px_20px_rgba(255,255,255,0.15)]"
           >
-            GHAMRAWY
+            Ghamrawy
           </h1>
         </div>
 
-        <div className="w-full flex flex-col md:flex-row justify-between items-center md:items-end gap-10 mt-12 md:mt-20">
+        <div className="w-full flex flex-col md:flex-row justify-between items-center md:items-end gap-6 md:gap-10 mt-8 md:mt-20">
           <div className="max-w-xl text-center md:text-left">
-            <p className="text-gray-400 text-lg md:text-2xl leading-relaxed font-light">
+            <p className="text-gray-400 text-sm sm:text-lg md:text-2xl leading-relaxed font-light px-4 md:px-0">
               Designing and building <span className="text-white font-medium">high-end digital experiences</span> that elevate luxury brands and drive exceptional results.
             </p>
           </div>
 
           {/* CTA Block */}
-          <div ref={ctaRef} className="flex flex-col sm:flex-row items-center gap-4">
+          <div ref={ctaRef} className="flex flex-row items-center gap-4 mt-8 md:mt-0">
             <a 
               ref={magneticRef1}
               href="https://cal.com/amrghamrawy/30min"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative w-[180px] h-[180px] flex items-center justify-center border border-white/20 rounded-full bg-white/5 backdrop-blur-md hover:bg-white text-white hover:text-black transition-colors duration-500 overflow-hidden cursor-none"
+              className="group relative w-[130px] h-[130px] md:w-[180px] md:h-[180px] flex items-center justify-center border border-white/20 rounded-full bg-white/5 backdrop-blur-md hover:bg-white text-white hover:text-black transition-colors duration-500 overflow-hidden cursor-none"
             >
-              <span className="relative z-10 text-[11px] uppercase tracking-[0.2em] font-bold text-center px-4">
+              <span className="relative z-10 text-[9px] md:text-[11px] uppercase tracking-[0.2em] font-bold text-center px-4">
                 Book a<br/>Free Call
               </span>
             </a>
@@ -168,9 +193,9 @@ export default function Hero() {
                 }
               }}
               aria-label="Explore Work"
-              className="group relative w-[120px] h-[120px] flex items-center justify-center border border-white/20 rounded-full bg-transparent text-white hover:bg-white/10 transition-colors duration-500 cursor-none"
+              className="group relative w-[90px] h-[90px] md:w-[120px] md:h-[120px] flex items-center justify-center border border-white/20 rounded-full bg-transparent text-white hover:bg-white/10 transition-colors duration-500 cursor-none"
             >
-              <span className="relative z-10 text-[10px] uppercase tracking-[0.2em] font-bold">
+              <span className="relative z-10 text-[8px] md:text-[10px] uppercase tracking-[0.2em] font-bold">
                 Explore
               </span>
             </button>

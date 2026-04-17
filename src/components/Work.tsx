@@ -125,7 +125,7 @@ export default function Work() {
         {PROJECTS.map((project, index) => (
           <section 
             key={project.id}
-            className={`project-card project-card-${index} relative w-full md:w-screen h-screen flex flex-col justify-center px-6 md:px-20 shrink-0 py-20 md:py-0`}
+            className={`project-card project-card-${index} relative w-full md:w-screen h-[100svh] md:h-screen flex flex-col justify-center px-4 md:px-20 shrink-0 py-16 md:py-0`}
           >
             <div className="flex flex-col h-full justify-center max-w-7xl mx-auto w-full gap-8 md:gap-12">
               
@@ -161,7 +161,7 @@ export default function Work() {
               </div>
 
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-10">
-                <h3 className="text-5xl md:text-8xl font-black font-display uppercase tracking-tighter reveal-text leading-none">
+                <h3 className="text-4xl md:text-8xl font-black font-display uppercase tracking-tighter reveal-text leading-none">
                   {project.title}
                 </h3>
                 <p className="text-gray-400 text-sm md:text-base max-w-sm reveal-text font-light">
