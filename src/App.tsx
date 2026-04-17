@@ -7,6 +7,7 @@ import Cursor from './components/Cursor';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
+import Marquee from './components/Marquee';
 import Work from './components/Work';
 import Skills from './components/Skills';
 import Contact from './components/Contact';
@@ -82,6 +83,7 @@ export default function App() {
       <div id="about">
         <About />
       </div>
+      <Marquee />
       <div id="work">
         <Work />
       </div>

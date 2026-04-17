@@ -4,64 +4,82 @@ import SplitType from 'split-type';
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const nameRef = useRef<HTMLHeadingElement>(null);
+  const firstNameRef = useRef<HTMLHeadingElement>(null);
+  const lastNameRef = useRef<HTMLHeadingElement>(null);
   const subtextRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const magneticRef1 = useRef<HTMLAnchorElement>(null);
+  const magneticRef2 = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (!nameRef.current) return;
+    if (!firstNameRef.current || !lastNameRef.current) return;
 
-    const text = new SplitType(nameRef.current, { types: 'chars' });
+    const splitFirst = new SplitType(firstNameRef.current, { types: 'chars' });
+    const splitLast = new SplitType(lastNameRef.current, { types: 'chars' });
     
-    const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+    const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
-    tl.from(text.chars, {
+    tl.from([...splitFirst.chars!, ...splitLast.chars!], {
       y: 150,
       rotateX: -90,
       opacity: 0,
-      stagger: 0.03,
-      duration: 2,
-      delay: 0.5,
+      stagger: 0.02,
+      duration: 1.5,
+      delay: 0.2,
       transformOrigin: "0% 50% -50",
     })
     .from(subtextRef.current, {
       y: 30,
       opacity: 0,
       duration: 1.2,
-    }, '-=1.5')
+    }, '-=1.2')
     .from(ctaRef.current, {
       y: 30,
       opacity: 0,
       duration: 1.2,
     }, '-=1');
 
-    // Force full opacity after animation completes on the subtext and cta
-    tl.set(subtextRef.current, { opacity: 1, clearProps: 'none' });
-    tl.set(ctaRef.current, { opacity: 1, clearProps: 'none' });
+    // Clean up props after animation
+    tl.set([subtextRef.current, ctaRef.current], { opacity: 1, clearProps: 'none' });
 
-    // 3D Hover Effect
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current || !nameRef.current) return;
-
-      const { clientX, clientY } = e;
-      const { left, top, width, height } = containerRef.current.getBoundingClientRect();
+    // Magnetic Button Logic
+    const initMagnetic = (element: HTMLElement | null) => {
+      if (!element) return;
       
-      const x = (clientX - left) / width - 0.5;
-      const y = (clientY - top) / height - 0.5;
+      const magnetMove = (e: MouseEvent) => {
+        const { clientX, clientY } = e;
+        const { left, top, width, height } = element.getBoundingClientRect();
+        const x = clientX - (left + width / 2);
+        const y = clientY - (top + height / 2);
 
-      const intensity = window.innerWidth < 768 ? 5 : 20;
+        gsap.to(element, {
+          x: x * 0.3,
+          y: y * 0.3,
+          duration: 1,
+          ease: "elastic.out(1, 0.3)"
+        });
+      };
 
-      gsap.to(nameRef.current, {
-        rotateY: x * intensity,
-        rotateX: -y * intensity,
-        x: x * 10,
-        y: y * 10,
-        duration: 1,
-        ease: 'power2.out',
-      });
+      const magnetLeave = () => {
+        gsap.to(element, {
+          x: 0,
+          y: 0,
+          duration: 1,
+          ease: "elastic.out(1, 0.3)"
+        });
+      };
+
+      element.addEventListener('mousemove', magnetMove);
+      element.addEventListener('mouseleave', magnetLeave);
+
+      return () => {
+        element.removeEventListener('mousemove', magnetMove);
+        element.removeEventListener('mouseleave', magnetLeave);
+      };
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    const cleanup1 = initMagnetic(magneticRef1.current);
+    const cleanup2 = initMagnetic(magneticRef2.current);
 
     // Subtle background movement
     gsap.to('.hero-bg-gradient', {
@@ -74,64 +92,74 @@ export default function Hero() {
     });
 
     return () => {
-      text.revert();
-      window.removeEventListener('mousemove', handleMouseMove);
+      splitFirst.revert();
+      splitLast.revert();
+      cleanup1 && cleanup1();
+      cleanup2 && cleanup2();
     };
   }, []);
 
   return (
     <section 
       ref={containerRef}
-      className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden px-6 perspective-1000"
+      className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden px-6 pt-20 pb-10 perspective-1000"
     >
       {/* Background Gradient */}
-      <div className="hero-bg-gradient absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_50%)] pointer-events-none" />
+      <div className="hero-bg-gradient absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0%,transparent_50%)] pointer-events-none" />
       
-      <div className="relative z-[60] text-center w-full max-w-7xl mx-auto px-6 md:px-10 flex flex-col items-center">
+      <div className="relative z-[60] w-full max-w-[90rem] mx-auto px-6 md:px-10 flex flex-col items-center md:items-start">
 
         {/* Eyebrow */}
-        <div ref={subtextRef} className="mb-6 overflow-hidden">
-          <span className="hero-visible" style={{
-            display: 'block',
-            fontSize: '13px',
-            fontWeight: 700,
-            letterSpacing: '0.25em',
-            textTransform: 'uppercase',
-          }}>
-            Senior UI/UX Designer & Full Stack Developer
-          </span>
+        <div ref={subtextRef} className="mb-4 overflow-hidden self-center md:self-start">
+          <div className="flex items-center gap-4">
+            <div className="status-dot relative">
+              <div className="absolute inset-0 bg-white rounded-full animate-ping opacity-50" />
+            </div>
+            <span className="text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-gray-400">
+              Available for freelance work
+            </span>
+          </div>
         </div>
         
-        {/* Name */}
-        <div className="perspective-1000 w-full flex justify-center">
+        {/* Name (Staggered Layout) */}
+        <div className="w-full flex flex-col items-center md:items-start relative my-8">
           <h1 
-            ref={nameRef}
-            className="main-title mb-8 md:mb-12 transform-style-3d glass-text !whitespace-nowrap"
+            ref={firstNameRef}
+            className="text-[clamp(4rem,15vw,12rem)] leading-[0.8] font-black font-display tracking-tighter text-white"
           >
-            Amr Ghamrawy
+            AMR
+          </h1>
+          <h1 
+            ref={lastNameRef}
+            className="text-[clamp(4rem,15vw,12rem)] leading-[0.8] font-black font-display tracking-tighter text-transparent [-webkit-text-stroke:2px_rgba(255,255,255,0.8)] ml-0 md:ml-[10vw]"
+          >
+            GHAMRAWY
           </h1>
         </div>
 
-        {/* CTA Block */}
-        <div ref={ctaRef} className="flex flex-col items-center gap-10 mt-8 md:mt-12 w-full">
-          <p className="hero-visible font-bold text-xl md:text-3xl max-w-3xl leading-tight">
-            I design and build high-end digital experiences that elevate brands and drive results.
-          </p>
+        <div className="w-full flex flex-col md:flex-row justify-between items-center md:items-end gap-10 mt-12 md:mt-20">
+          <div className="max-w-xl text-center md:text-left">
+            <p className="text-gray-400 text-lg md:text-2xl leading-relaxed font-light">
+              Designing and building <span className="text-white font-medium">high-end digital experiences</span> that elevate luxury brands and drive exceptional results.
+            </p>
+          </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full">
+          {/* CTA Block */}
+          <div ref={ctaRef} className="flex flex-col sm:flex-row items-center gap-4">
             <a 
+              ref={magneticRef1}
               href="https://cal.com/amrghamrawy/30min"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative px-10 py-5 border-2 border-white rounded-full bg-white text-black hover:bg-transparent hover:text-white transition-all duration-500 overflow-hidden text-center min-w-[220px] shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+              className="group relative w-[180px] h-[180px] flex items-center justify-center border border-white/20 rounded-full bg-white/5 backdrop-blur-md hover:bg-white text-white hover:text-black transition-colors duration-500 overflow-hidden cursor-none"
             >
-              <span className="relative z-10 text-[12px] uppercase tracking-widest font-black">
-                Book a Free Call
+              <span className="relative z-10 text-[11px] uppercase tracking-[0.2em] font-bold text-center px-4">
+                Book a<br/>Free Call
               </span>
-              <div className="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-expo" />
             </a>
 
             <button 
+              ref={magneticRef2}
               onClick={() => {
                 if (window.lenis) {
                   window.lenis.scrollTo('#work', { duration: 1.2 });
@@ -139,24 +167,23 @@ export default function Hero() {
                   gsap.to(window, { scrollTo: { y: '#work', autoKill: false }, duration: 1.2, ease: 'expo.inOut' });
                 }
               }}
-              aria-label="View Work"
-              className="group relative px-10 py-5 border-2 border-white rounded-full bg-transparent text-white hover:bg-white hover:text-black transition-all duration-500 overflow-hidden text-center min-w-[220px] shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+              aria-label="Explore Work"
+              className="group relative w-[120px] h-[120px] flex items-center justify-center border border-white/20 rounded-full bg-transparent text-white hover:bg-white/10 transition-colors duration-500 cursor-none"
             >
-              <span className="relative z-10 text-[12px] uppercase tracking-widest font-black group-hover:text-black transition-colors duration-500">
-                View Work
+              <span className="relative z-10 text-[10px] uppercase tracking-[0.2em] font-bold">
+                Explore
               </span>
-              <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-expo" />
             </button>
           </div>
         </div>
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-10 left-10 flex flex-col items-start gap-4">
-        <div className="text-[10px] uppercase tracking-[0.1em] text-gray-600 origin-left -rotate-90 translate-y-[-20px] translate-x-[10px] whitespace-nowrap">
-          Scroll to Explore
+      <div className="absolute bottom-10 left-6 md:left-10 flex flex-col items-center gap-4 hidden md:flex">
+        <div className="text-[10px] uppercase tracking-[0.2em] text-gray-500 origin-left -rotate-90 translate-y-[-40px] translate-x-[10px] whitespace-nowrap">
+          Scroll
         </div>
-        <div className="w-[1px] h-[60px] bg-gradient-to-b from-white to-transparent" />
+        <div className="w-[1px] h-[80px] bg-gradient-to-b from-white/50 to-transparent" />
       </div>
     </section>
   );
